@@ -6,7 +6,7 @@ WORKDIR /san-exporter
 
 # Need to upgrade pip due to package cryptography - the requeriment of paramiko
 #   link: https://github.com/Azure/azure-cli/issues/16858
-RUN yum update -y && yum install -y \
+RUN sudo yum update -y && sudo yum install -y \
     python3 \
     python3-pip \
     ca-certificates \
