@@ -6,6 +6,11 @@ WORKDIR /san-exporter
 
 USER root
 
+RUN yum clean all && \
+    yum makecache fast && \
+    sed -i 's|mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-* && \
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && \
+
 # Need to upgrade pip due to package cryptography - the requeriment of paramiko
 #   link: https://github.com/Azure/azure-cli/issues/16858
 RUN yum update -y && sudo yum install -y \
