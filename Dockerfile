@@ -6,18 +6,19 @@ WORKDIR /san-exporter
 
 USER root
 
+# Configure YUM repositories and update system
 RUN yum clean all && \
     yum makecache fast && \
     sed -i 's|mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-* && \
     sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && \
-
-# Need to upgrade pip due to package cryptography - the requeriment of paramiko
-#   link: https://github.com/Azure/azure-cli/issues/16858
-RUN yum update -y && sudo yum install -y \
-    python3 \
-    python3-pip \
-    ca-certificates \
-    openssl && \
+    yum-config-manager --add-repo=http://vault.centos.org/centos/7/os/x86_64/ && \
+    yum-config-manager --add-repo=http://vault.centos.org/centos/7/updates/x86_64/ && \
+    yum update -y && \
+    yum install -y \
+        python3 \
+        python3-pip \
+        ca-certificates \
+        openssl && \
     update-ca-trust
 
 # Install Python dependencies
