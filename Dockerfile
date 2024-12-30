@@ -6,9 +6,13 @@ WORKDIR /san-exporter
 
 # Need to upgrade pip due to package cryptography - the requeriment of paramiko
 #   link: https://github.com/Azure/azure-cli/issues/16858
-RUN pip install --upgrade pip
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    && update-ca-certificates
 
-RUN pip install -r requirements.txt
+# Install Python dependencies
+RUN pip install --no-cache-dir --trusted-host pypi.python.org -r requirements.txt
 
 USER root
 
